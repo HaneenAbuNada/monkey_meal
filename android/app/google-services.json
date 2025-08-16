@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "1059656065152",
+    "project_id": "meal-monkey-34c88",
+    "storage_bucket": "meal-monkey-34c88.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059656065152:android:090bef2a6e26b30b050665",
+        "android_client_info": {
+          "package_name": "com.example.monkey_meal_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059656065152-lmtb0gkdmjkkfm6gj545n686ssc53ltc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.monkey_meal_project",
+            "certificate_hash": "412b898191a86560153f196fb09069b30dbec72b"
+          }
+        },
+        {
+          "client_id": "1059656065152-qnjgtp9h1b0eq8c6cgae344n96mov32b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.monkey_meal_project",
+            "certificate_hash": "557407967aa69c7e944a25d638602f4d810ce594"
+          }
+        },
+        {
+          "client_id": "1059656065152-srbbvlqcusjvf84amtkog40j2ds91pcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1X3m0yVt3eAL5PYyMZBZPO1MRPVcwjcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059656065152-srbbvlqcusjvf84amtkog40j2ds91pcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1059656065152-htinas67t9ps307co2slm72qvbm48ff9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.monkeyMealProject"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059656065152:android:b9edd947fa024aa9050665",
+        "android_client_info": {
+          "package_name": "com.klilmhdev.monkey_meal.monkey_meal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059656065152-srbbvlqcusjvf84amtkog40j2ds91pcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1X3m0yVt3eAL5PYyMZBZPO1MRPVcwjcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059656065152-srbbvlqcusjvf84amtkog40j2ds91pcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1059656065152-htinas67t9ps307co2slm72qvbm48ff9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.monkeyMealProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
