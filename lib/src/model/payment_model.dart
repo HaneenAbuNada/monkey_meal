@@ -21,14 +21,23 @@ class PaymentModel extends Equatable {
   });
 
   factory PaymentModel.fromFirestore(String id, Map<String, dynamic> data) {
+    DateTime parseCreatedAt(dynamic createdAt) {
+      if (createdAt is Timestamp) {
+        return createdAt.toDate();
+      } else if (createdAt is int) {
+        return DateTime.fromMillisecondsSinceEpoch(createdAt);
+      }
+      return DateTime.now();
+    }
+
     return PaymentModel(
       id: id,
-      cardNumber: data['cardNumber'] ?? '',
-      cardHolderName: data['cardHolderName'] ?? '',
-      expiryDate: data['expiryDate'] ?? '',
-      cvv: data['cvv'] ?? '',
+      cardNumber: data['cardNumber']?.toString() ?? '',
+      cardHolderName: data['cardHolderName']?.toString() ?? '',
+      expiryDate: data['expiryDate']?.toString() ?? '',
+      cvv: data['cvv']?.toString() ?? '',
       isDefault: data['isDefault'] ?? false,
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      createdAt: parseCreatedAt(data['createdAt']),
     );
   }
 
@@ -39,7 +48,7 @@ class PaymentModel extends Equatable {
       'expiryDate': expiryDate,
       'cvv': cvv,
       'isDefault': isDefault,
-      'createdAt': createdAt,
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 

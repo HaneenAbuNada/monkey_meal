@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:monkey_meal/core/helper/sqlite_helper.dart';
 import 'package:monkey_meal/src/manage/auth_cubit/login_cubit/login_cubit.dart';
 import 'package:monkey_meal/src/manage/auth_cubit/signup_cubit/signup_cubit.dart';
 import 'package:monkey_meal/src/manage/foods/foods_cubit.dart';
@@ -25,6 +26,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   await SharedPrefController().initPreferences();
   await ScreenUtil.ensureScreenSize();
+  await SqliteHelper().database;
 
   runApp(MyApp(isLoggedIn: SharedPrefController().isLoggedIn));
 }

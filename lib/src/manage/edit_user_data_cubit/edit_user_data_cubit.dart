@@ -8,11 +8,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/helper/firebase_helper.dart';
+import '../../../core/helper/sqlite_helper.dart';
+import '../../../src/model/user_model.dart';
 
 part 'edit_user_data_state.dart';
 
 class EditUserDataCubit extends Cubit<EditUserDataState> {
   File? profileImage;
+  final SqliteHelper _sqliteHelper = SqliteHelper();
 
   EditUserDataCubit() : super(EditUserInitial());
 
@@ -24,7 +27,24 @@ class EditUserDataCubit extends Cubit<EditUserDataState> {
       final uid = FirebaseServices().currentUserId;
       if (uid == null) throw Exception("User not logged in");
 
+      // First try to get from local database
+      UserModel? localUser = await _sqliteHelper.getUser(uid);
+
+      if (localUser != null) {
+        emit(
+          SuccessGetUserDataFromFirebaseState(
+            name: localUser.name,
+            email: localUser.email,
+            phone: localUser.phone ?? '',
+            address: localUser.address ?? '',
+            image: localUser.imageUrl,
+          ),
+        );
+      }
+
+      // Then get from Firebase and update local
       final currentUser = await FirebaseServices().getUser(uid);
+      await _sqliteHelper.insertUser(currentUser);
 
       emit(
         SuccessGetUserDataFromFirebaseState(
@@ -98,7 +118,25 @@ class EditUserDataCubit extends Cubit<EditUserDataState> {
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
+      // Update Firebase
       await FirebaseServices().usersCollection.doc(userId).update(updateData);
+
+      // Update local database
+      final updatedUser = UserModel(
+        id: userId,
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        imageUrl: profileImage?.path,
+        // Add other required fields from your UserModel
+        password: '',
+        // You might want to handle this differently
+        token: '',
+        createdAt: DateTime.now(),
+      );
+
+      await _sqliteHelper.updateUser(updatedUser);
 
       emit(EditUserSuccess());
     } catch (e) {

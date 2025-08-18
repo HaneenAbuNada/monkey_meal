@@ -12,7 +12,7 @@ final class LoginInitial extends LoginState {}
 final class LoadingLoginState extends LoginState {}
 
 final class SuccessLoginState extends LoginState {
-  final User user;
+  final UserModel user;
 
   const SuccessLoginState(this.user);
 

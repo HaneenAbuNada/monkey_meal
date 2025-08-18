@@ -27,14 +27,16 @@ class OrderModel extends Equatable {
   factory OrderModel.fromFirestore(String id, Map<String, dynamic> data) {
     return OrderModel(
       id: id,
-      itemName: data['itemName'] ?? '',
-      itemDescription: data['itemDescription'] ?? '',
-      itemCover: data['itemCover'] ?? '',
-      itemRating: (data['itemRating'] ?? 0.0).toDouble(),
-      itemPrice: (data['itemPrice'] ?? 0).toDouble(),
-      quantity: (data['quantity'] ?? 1).toInt(),
-      orderedAt: (data['orderedAt'] as Timestamp).toDate(),
-      status: data['status'] ?? 'pending',
+      itemName: data['itemName']?.toString() ?? '',
+      itemDescription: data['itemDescription']?.toString() ?? '',
+      itemCover: data['itemCover']?.toString() ?? '',
+      itemRating: (data['itemRating'] as num?)?.toDouble() ?? 0.0,
+      itemPrice: (data['itemPrice'] as num?)?.toDouble() ?? 0.0,
+      quantity: (data['quantity'] as int?) ?? 1,
+      orderedAt: data['orderedAt'] is Timestamp
+          ? (data['orderedAt'] as Timestamp).toDate()
+          : DateTime.fromMillisecondsSinceEpoch(data['orderedAt'] as int? ?? 0),
+      status: data['status']?.toString() ?? 'pending',
     );
   }
 
@@ -46,7 +48,7 @@ class OrderModel extends Equatable {
       'itemRating': itemRating,
       'itemPrice': itemPrice,
       'quantity': quantity,
-      'orderedAt': orderedAt,
+      'orderedAt': orderedAt.millisecondsSinceEpoch,
       'status': status,
     };
   }
