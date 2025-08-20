@@ -59,6 +59,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       SharedPrefController().isLoggedIn = false;
       await SharedPrefController().clear();
+
       NavAndAnimationsFunctions.navAndFinish(context, const LandingScreen());
     } catch (e) {
       debugPrint('Logout error: $e');

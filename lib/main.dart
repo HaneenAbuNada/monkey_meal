@@ -64,7 +64,6 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(fontFamily: 'Metropolis', scaffoldBackgroundColor: Colors.white),
               home: SplashScreen(isLoggedIn: isLoggedIn),
               title: "Monkey Meal",
-              // routes: routes,
             ),
       ),
     );

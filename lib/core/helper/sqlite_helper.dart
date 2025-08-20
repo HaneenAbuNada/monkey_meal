@@ -36,18 +36,19 @@ class SqliteHelper {
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE users (
-        id TEXT PRIMARY KEY,
-        name TEXT NOT NULL,
-        email TEXT NOT NULL,
-        password TEXT,
-        phone TEXT,
-        address TEXT,
-        token TEXT,
-        imageUrl TEXT,
-        createdAt INTEGER NOT NULL
-      )
-    ''');
+    CREATE TABLE users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      password TEXT,
+      phone TEXT,
+      address TEXT,
+      token TEXT,
+      imageUrl TEXT,
+      createdAt INTEGER NOT NULL,
+      updatedAt INTEGER
+    )
+  ''');
 
     await db.execute('''
       CREATE TABLE items (
@@ -94,10 +95,10 @@ class SqliteHelper {
     ''');
   }
 
-  Future<int> insertUser(UserModel user) async {
-    final db = await database;
-    return await db.insert('users', user.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
-  }
+  // Future<int> insertUser(UserModel user) async {
+  //   final db = await database;
+  //   return await db.insert('users', user.toFirestoreJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+  // }
 
   Future<UserModel?> getUser(String id) async {
     final db = await database;
@@ -109,10 +110,10 @@ class SqliteHelper {
     return null;
   }
 
-  Future<int> updateUser(UserModel user) async {
-    final db = await database;
-    return await db.update('users', user.toJson(), where: 'id = ?', whereArgs: [user.id]);
-  }
+  // Future<int> updateUser(UserModel user) async {
+  //   final db = await database;
+  //   return await db.update('users', user.toFirestoreJson(), where: 'id = ?', whereArgs: [user.id]);
+  // }
 
   Future<int> deleteUser(String id) async {
     final db = await database;

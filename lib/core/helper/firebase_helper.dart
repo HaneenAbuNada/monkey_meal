@@ -205,7 +205,7 @@ class FirebaseServices {
   Future<List<OrderModel>> getUserOrders(String userId) async {
     try {
       final snapshot =
-          await usersCollection.doc(userId).collection('orders').orderBy('orderedAt', descending: true).get();
+      await usersCollection.doc(userId).collection('orders').orderBy('orderedAt', descending: true).get();
 
       return snapshot.docs.map((doc) {
         return OrderModel.fromFirestore(doc.id, doc.data());
@@ -221,6 +221,22 @@ class FirebaseServices {
       await usersCollection.doc(userId).collection('orders').doc(orderId).update({'status': status});
     } catch (e) {
       print('Error updating order status: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteUserOrders(String userId) async {
+    try {
+      final ordersSnapshot = await usersCollection.doc(userId).collection('orders').get();
+      final batch = _firestore.batch();
+      for (final doc in ordersSnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      debugPrint('All orders deleted successfully for user: $userId');
+    } catch (e, s) {
+      debugPrint('Error deleting orders: $e');
+      debugPrint('Error deleting orders: $s');
       rethrow;
     }
   }
@@ -241,11 +257,11 @@ class FirebaseServices {
       if (currentUserId == null) throw Exception('User not authenticated');
 
       final snapshot =
-          await usersCollection
-              .doc(currentUserId)
-              .collection('payment_methods')
-              .orderBy('createdAt', descending: true)
-              .get();
+      await usersCollection
+          .doc(currentUserId)
+          .collection('payment_methods')
+          .orderBy('createdAt', descending: true)
+          .get();
 
       return snapshot.docs.map((doc) {
         return PaymentModel.fromFirestore(doc.id, doc.data());

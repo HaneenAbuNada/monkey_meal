@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:monkey_meal/core/helper/firebase_helper.dart';
 
-import '../../../../core/helper/sqlite_helper.dart';
 import '../../../../core/shared_preferenced/shared_preferenced.dart';
 import '../../../model/user_model.dart';
 
@@ -27,36 +27,26 @@ class SignupCubit extends Cubit<SignupState> {
   }) async {
     emit(SignupLoading());
     try {
-      final db = await SqliteHelper().database;
-
-      // تأكد إنه الإيميل مش مسجل قبل
-      final existingUser = await db.query('users', where: 'email = ?', whereArgs: [email]);
-
-      if (existingUser.isNotEmpty) {
-        emit(SignupError("This email is already registered!"));
-        return;
-      }
-
+      final userCredential = await _firebaseServices.signUpWithEmail(email, password);
+      final fcmToken = await _firebaseServices.getFcmToken();
       final user = UserModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        // id محلي
+        id: userCredential.user!.uid,
         name: name,
         email: email,
         phone: phone,
         address: address,
-        token: "",
-        // ممكن تحط FCM token إذا لسه بدك
+        token: fcmToken,
         createdAt: DateTime.now(),
       );
-
-      await db.insert('users', user.toJson());
-
+      await _firebaseServices.createUser(user);
       SharedPrefController().isLoggedIn = true;
       emit(SignupSuccess(user));
+    } on FirebaseAuthException catch (e) {
+      emit(SignupError(e.message ?? 'Authentication failed'));
     } catch (e, s) {
       debugPrint("Error: $e");
       debugPrint("StackTrace: $s");
-      emit(SignupError("Signup failed: $e"));
+      emit(SignupError('An unexpected error occurred'));
     }
   }
 

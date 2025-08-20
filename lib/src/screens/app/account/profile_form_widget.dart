@@ -103,31 +103,6 @@ class _ProfileFormState extends State<ProfileForm> {
             },
           ),
           const SizedBox(height: 15),
-          // customTextField(
-          //   hintText: 'Password',
-          //   obscureText: true,
-          //   controller: _passwordController,
-          //   keyboardType: TextInputType.visiblePassword,
-          //   validator: (value) {
-          //     if (value != null && value.isNotEmpty && value.length < 5) {
-          //       return 'Password must be at least 5 characters';
-          //     }
-          //     return null;
-          //   },
-          // ),
-          // const SizedBox(height: 15),
-          // customTextField(
-          //   hintText: 'Confirm Password',
-          //   obscureText: true,
-          //   controller: _confirmPasswordController,
-          //   keyboardType: TextInputType.visiblePassword,
-          //   validator: (value) {
-          //     if (_passwordController.text.isNotEmpty && value != _passwordController.text) {
-          //       return 'Passwords do not match';
-          //     }
-          //     return null;
-          //   },
-          // ),
           const SizedBox(height: 20),
           BlocBuilder<EditUserDataCubit, EditUserDataState>(
             builder: (context, state) {
@@ -136,7 +111,7 @@ class _ProfileFormState extends State<ProfileForm> {
                   : customButton(
                 title: 'Save',
                 press: () {
-                  if (_formKey.currentState!.validate()) {
+                  // if (_formKey.currentState!.validate()) {
                     final userId = FirebaseServices().currentUserId;
                     if (userId != null) {
                       cubit.updateUserData(
@@ -147,7 +122,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         address: _addressController.text,
                       );
                     }
-                  }
+                  // }
                 },
               );
             },

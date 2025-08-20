@@ -26,10 +26,7 @@ class EditUserDataCubit extends Cubit<EditUserDataState> {
     try {
       final uid = FirebaseServices().currentUserId;
       if (uid == null) throw Exception("User not logged in");
-
-      // First try to get from local database
       UserModel? localUser = await _sqliteHelper.getUser(uid);
-
       if (localUser != null) {
         emit(
           SuccessGetUserDataFromFirebaseState(
@@ -41,11 +38,8 @@ class EditUserDataCubit extends Cubit<EditUserDataState> {
           ),
         );
       }
-
-      // Then get from Firebase and update local
       final currentUser = await FirebaseServices().getUser(uid);
-      await _sqliteHelper.insertUser(currentUser);
-
+      // await _sqliteHelper.insertUser(currentUser);
       emit(
         SuccessGetUserDataFromFirebaseState(
           name: currentUser.name,
@@ -114,30 +108,11 @@ class EditUserDataCubit extends Cubit<EditUserDataState> {
         'email': email,
         if (phone != null) 'phone': phone,
         if (address != null) 'address': address,
-        if (profileImage != null) 'imageUrl': profileImage!.path,
         'updatedAt': FieldValue.serverTimestamp(),
       };
-
-      // Update Firebase
       await FirebaseServices().usersCollection.doc(userId).update(updateData);
-
-      // Update local database
-      final updatedUser = UserModel(
-        id: userId,
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        imageUrl: profileImage?.path,
-        // Add other required fields from your UserModel
-        password: '',
-        // You might want to handle this differently
-        token: '',
-        createdAt: DateTime.now(),
-      );
-
-      await _sqliteHelper.updateUser(updatedUser);
-
+      final updatedUser = await FirebaseServices().getUser(userId);
+      // await _sqliteHelper.updateUser(updatedUser);
       emit(EditUserSuccess());
     } catch (e) {
       emit(EditUserError(e.toString()));
